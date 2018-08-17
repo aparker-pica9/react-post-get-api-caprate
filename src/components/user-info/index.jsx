@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import Response from '../response'
 
 class UserInfo extends Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.state = {
       street: '',
       city: '',
@@ -28,7 +28,10 @@ class UserInfo extends Component {
       utility: '',
       management: '',
       capitalizationrate: '',
-      response: false
+      response: false,
+      responseData: [ 'Response Data']
+
+
     };
     this.handleChange = this.handleChange.bind(this);
 
@@ -59,26 +62,25 @@ class UserInfo extends Component {
         rate    : capitalizationrate,
         noi     : totalNoi,
         address : {
-                   street: street,
-                   city  : city,
-                   state : state,
-                   county: county,
-                   zip   : zip
+         street: street,
+         city  : city,
+         state : state,
+         county: county,
+         zip   : zip
         }
     }
     axios({
           method:'post',
+          dataType: 'json',
           url:'https://script.google.com/macros/s/AKfycbwPGz6uQQS9IW33ASPYlcWaEtRMD8eDAK1ONg7lT2dREXpaSUYh/exec',
           headers: {
             'Content-Type': 'application/json',
           },
           data: postData
         })
-        .then(function (response) {
-          console.log(response);
-          this.setState({
-            response: true,
-          })
+        .then(res => {
+          const responseData = res.data;
+          this.setState({ lists: lists, response: true });
         })
         .catch(function (error) {
           console.log(error);
@@ -95,24 +97,24 @@ class UserInfo extends Component {
           <form onSubmit={this.onSubmit}>
             <p>Address</p>
             <label>Street</label>
-            <input type="text" name="street"  onChange={this.handleChange} />
+            <input type="text" name="street"  onChange={this.handleChange} required/>
 
             <label>City</label>
-            <input type="text" name="city"  onChange={this.handleChange} />
+            <input type="text" name="city"  onChange={this.handleChange} required/>
 
             <label>State</label>
-            <input type="text" name="state"  onChange={this.handleChange}/>
+            <input type="text" name="state"  onChange={this.handleChange} required/>
 
             <label>County</label>
-            <input type="text" name="county"  onChange={this.handleChange}/>
+            <input type="text" name="county"  onChange={this.handleChange} required/>
 
             <label>Zip</label>
-            <input type="text" name="zip"  onChange={this.handleChange}/>
+            <input type="text" name="zip"  onChange={this.handleChange} required/>
 
             <p>Rent Roll</p>
 
             <label>Monthly Rent</label>
-            <input type="text" name="monthlyrent" onChange={this.handleChange}/>
+            <input type="text" name="monthlyrent" onChange={this.handleChange} required/>
 
             <label>Unit Number</label>
             <input type="text" name="unitnumber" onChange={this.handleChange}/>
@@ -132,41 +134,49 @@ class UserInfo extends Component {
             <p>Expense Items</p>
 
             <label>Marketing</label>
-            <input type="text" name="marketing" onChange={this.handleChange}/>
+            <input type="text" name="marketing" onChange={this.handleChange} required/>
 
             <label>Taxes</label>
-            <input type="text" name="taxes" onChange={this.handleChange}/>
+            <input type="text" name="taxes" onChange={this.handleChange} required/>
 
             <label>Insurance</label>
-            <input type="text" name="insurance" onChange={this.handleChange}/>
+            <input type="text" name="insurance" onChange={this.handleChange} required/>
 
             <label>Repairs</label>
-            <input type="text" name="repairs" onChange={this.handleChange}/>
+            <input type="text" name="repairs" onChange={this.handleChange} required/>
 
             <label>Administration</label>
-            <input type="text" name="administration" onChange={this.handleChange}/>
+            <input type="text" name="administration" onChange={this.handleChange} required/>
 
             <label>Payroll</label>
-            <input type="text" name="payroll" onChange={this.handleChange}/>
+            <input type="text" name="payroll" onChange={this.handleChange} required/>
 
             <label>Utility</label>
-            <input type="text" name="utility" onChange={this.handleChange}/>
+            <input type="text" name="utility" onChange={this.handleChange} required/>
 
             <label>Management</label>
-            <input type="text" name="management" onChange={this.handleChange}/>
+            <input type="text" name="management" onChange={this.handleChange} required/>
 
             <p>Capitalization Rate</p>
 
             <label>Capitalization Rate</label>
-            <input type="text" name="capitalizationrate" onChange={this.handleChange}/>
+            <input type="text" name="capitalizationrate" onChange={this.handleChange} required/>
 
             <button type="submit">Submit</button>
           </form>
         </FormWrap>
         <div>
-          { this.state.response === 'true' ? (
-            <Response/>
-          ) : null }
+          {/*
+            { this.state.response === 'true' ? (
+              <Response
+                responseData = {this.state.responseData}
+              />
+            ) : null }
+          */}
+
+            <Response
+              responseData = {this.state.responseData}
+            />
         </div>
 
       </div>
